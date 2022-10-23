@@ -1,0 +1,24 @@
+{
+  "name": "backend-hyperexpress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=16.x"
+  },
+  "scripts": {
+    "migrate:make": "knex migrate:make",
+    "migrate": "knex migrate:latest",
+    "prestart": "knex migrate:latest",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hyper-express": "^6.5.0",
+    "knex": "^2.3.0",
+    "mysql2": "^2.3.3"
+  }
+}

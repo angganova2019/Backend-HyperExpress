@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: app
+    build: .
+    restart: unless-stopped
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3030:3030
+    expose:
+      - 3030
+    stdin_open: true
+    environment:
+      PORT: 3030
+      HOST: 0.0.0.0
+      MYSQL_PORT: 3306
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_USER: angga
+      MYSQL_PASSWORD: secret
+      MYSQL_DBNAME: todo4
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
