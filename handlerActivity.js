@@ -13,7 +13,7 @@ const getOneActivity = async (request, response) => {
     if (result.length === 0) {
         return NotFoundResponse(response, `Activity with ID ${id} Not Found`);
     }
-    return OkResponse(response, result);
+    return OkResponse(response, result[0]);
 };
 
 const createActivity = async (request, response) => {

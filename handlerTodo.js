@@ -20,7 +20,7 @@ const getOneTodo = async (request, response) => {
     if (result.length === 0) {
         return NotFoundResponse(response, `Todo with ID ${id} Not Found`);
     }
-    return OkResponse(response, result);
+    return OkResponse(response, result[0]);
 };
 
 const createTodo = async (request, response) => {
@@ -35,7 +35,7 @@ const createTodo = async (request, response) => {
         id,
         activity_group_id,
         title,
-        is_active,
+        is_active: !!is_active,
         priority,
     };
     return CreatedResponse(response, result);
