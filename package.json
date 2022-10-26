@@ -8,16 +8,14 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "migrate:make": "knex migrate:make",
     "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^7.5.0",
     "hyper-express": "^6.5.0",
-    "knex": "^2.3.0",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.25.3"
   }
 }

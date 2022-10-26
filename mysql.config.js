@@ -1,18 +1,10 @@
-import knex from 'knex';
+import Sequelize from 'sequelize';
 
-const database = knex({
-    client: 'mysql2',
-    connection: {
-        host: process.env.MYSQL_HOST,
-        port: 3306,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DBNAME
-    },
-    pool: {
-        min: 0,
-        max: 20,
-    }
+const sequelize = new Sequelize(process.env.MYSQL_DBNAME, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT,
+    dialect: 'mysql',
+    logging: false
 });
 
-export { database as db };
+export { sequelize as db };
