@@ -11,7 +11,13 @@ const database = knex({
     },
     pool: {
         min: 0,
-        max: 20,
+        max: 150,
+        destroyTimeoutMillis: 100,
+        idleTimeoutMillis: 100,
+        reapIntervalMillis: 100,
+        createRetryIntervalMillis: 400,
+        acquireTimeoutMillis: 10000,
+        createTimeoutMillis: 10000,
     }
 });
 
