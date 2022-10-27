@@ -1,19 +1,31 @@
 import { db } from './mysql.config.js';
 import { BadRequestResponse, CreatedResponse, NotFoundResponse, OkResponse } from './respons.js';
+import { cache } from './caching.js';
 
+const caching = new cache();
 
 const getActivity = async (request, response) => {
-    const result = await db.select('id', 'title', 'created_at').from('activities').limit(10);
-    return OkResponse(response, result);
+    const key = 'activities';
+    let reply = caching.get(key);
+    if (reply === undefined) {
+        reply = await db.select('id', 'title', 'created_at').from('activities').limit(10);
+        caching.set(key, reply);
+    }
+    return OkResponse(response, reply);
 };
 
 const getOneActivity = async (request, response) => {
     const { id } = request.path_parameters;
-    const result = await db.select('id', 'title', 'email', 'created_at').from('activities').where({ id });
-    if (result.length === 0) {
-        return NotFoundResponse(response, `Activity with ID ${id} Not Found`);
+    const key = `activities-${id}`;
+    let reply = caching.get(key);
+    if (typeof reply === undefined) {
+        reply = await db.select('id', 'title', 'email', 'created_at').from('activities').where({ id }).first();
+        if (!reply) {
+            return NotFoundResponse(response, `Activity with ID ${id} Not Found`);
+        }
+        caching.set(key, reply);
     }
-    return OkResponse(response, result[0]);
+    return OkResponse(response, reply);
 };
 
 const createActivity = async (request, response) => {
@@ -30,6 +42,8 @@ const createActivity = async (request, response) => {
         email,
         title,
     };
+    caching.set(`activities-${id}`, result);
+    caching.del('activities');
     return CreatedResponse(response, result);
 };
 
@@ -41,6 +55,8 @@ const updateActivity = async (request, response) => {
     if (result.length === 0) {
         return NotFoundResponse(response, `Activity with ID ${id} Not Found`);
     }
+    caching.set(`activities-${id}`, result[0]);
+    caching.del('activities');
     return OkResponse(response, result[0]);
 };
 
@@ -50,6 +66,8 @@ const deleteActivity = async (request, response) => {
     if (!result) {
         return NotFoundResponse(response, `Activity with ID ${id} Not Found`);
     }
+    caching.del(`activities-${id}`);
+    caching.del('activities');
     return OkResponse(response, {});
 };
 
