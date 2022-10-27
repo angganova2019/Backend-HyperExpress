@@ -9,16 +9,6 @@ const database = knex({
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DBNAME
     },
-    pool: {
-        min: 0,
-        max: 150,
-        destroyTimeoutMillis: 100,
-        idleTimeoutMillis: 100,
-        reapIntervalMillis: 100,
-        createRetryIntervalMillis: 400,
-        acquireTimeoutMillis: 10000,
-        createTimeoutMillis: 10000,
-    }
 });
 
 export { database as db };

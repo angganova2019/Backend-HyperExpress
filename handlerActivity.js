@@ -3,7 +3,7 @@ import { BadRequestResponse, CreatedResponse, NotFoundResponse, OkResponse } fro
 
 
 const getActivity = async (request, response) => {
-    const result = await db.select('id', 'title', 'created_at').from('activities');
+    const result = await db.select('id', 'title', 'created_at').from('activities').limit(10);
     return OkResponse(response, result);
 };
 

@@ -10,7 +10,7 @@ const getTodo = async (request, response) => {
             activity_group_id
         });
     }
-    const result = await q;
+    const result = await q.limit(10);
     return OkResponse(response, result);
 };
 
