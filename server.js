@@ -1,6 +1,7 @@
 import { Server } from 'hyper-express';
 import { migratedb } from './migrate.js';
 import { api_router } from './routes.js';
+
 const webserver = new Server();
 
 webserver.use('/', api_router);
