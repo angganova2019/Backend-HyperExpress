@@ -15,7 +15,7 @@ const getTodo = async (request, response) => {
                 activity_group_id
             });
         }
-        reply = await q.limit(10);
+        reply = await q.limit(20);
         caching.set(key, reply);
     }
     return OkResponse(response, reply);
@@ -25,7 +25,7 @@ const getOneTodo = async (request, response) => {
     const { id } = request.path_parameters;
     const key = `todos-${id}`;
     let reply = caching.get(key);
-    if(!reply) {
+    if (!reply) {
         reply = await db.select('id', 'activity_group_id', 'title', 'is_active', 'priority').from('todos').where({ id }).first();
         if (!reply) {
             return NotFoundResponse(response, `Todo with ID ${id} Not Found`);
@@ -60,7 +60,7 @@ const updateTodo = async (request, response) => {
     const data = await request.json();
     await db('todos').where({ id }).update({ ...data });
     const result = await db.select('id', 'activity_group_id', 'title', 'is_active', 'priority').from('todos').where({ id }).first();
-    if(!result){
+    if (!result) {
         return NotFoundResponse(response, `Todo with ID ${id} Not Found`);
     }
     caching.set(`todos-${id}`, result);

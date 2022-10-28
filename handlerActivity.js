@@ -7,8 +7,8 @@ const caching = cache;
 const getActivity = async (request, response) => {
     const key = 'activities';
     let reply = caching.get(key);
-    if (reply === undefined) {
-        reply = await db.select('id', 'title', 'created_at').from('activities').limit(10);
+    if (!reply) {
+        reply = await db.select('id', 'title', 'email').from('activities').limit(20);
         caching.set(key, reply);
     }
     return OkResponse(response, reply);
@@ -39,8 +39,8 @@ const createActivity = async (request, response) => {
     const [id] = await db('activities').insert({ email, title });
     const result = {
         id,
-        email,
         title,
+        email,
     };
     caching.set(`activities-${id}`, result);
     caching.del('activities');
@@ -52,7 +52,7 @@ const updateActivity = async (request, response) => {
     const data = await request.json();
     await db('activities').where({ id }).update({ ...data });
     const result = await db.select('id', 'title', 'email').from('activities').where({ id }).first();
-    if(!result){
+    if (!result) {
         return NotFoundResponse(response, `Activity with ID ${id} Not Found`);
     }
     caching.set(`activities-${id}`, result);
